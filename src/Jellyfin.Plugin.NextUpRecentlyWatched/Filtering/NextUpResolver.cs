@@ -1,13 +1,13 @@
 using Jellyfin.Database.Implementations.Entities;
-using Jellyfin.Plugin.EnhancedNextUp.Resolvers;
-using Jellyfin.Plugin.EnhancedNextUp.Services;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Resolvers;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Services;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Filtering;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Filtering;
 
 /// <summary>
-/// Orchestrates the Enhanced Next Up algorithm for a given series/user combination:
+/// Orchestrates the Next Up (Recently Watched) algorithm for a given series/user combination:
 /// checks whether the plugin is enabled for that series, loads the episode data, and
 /// delegates the actual selection to <see cref="EpisodeSequenceResolver"/>.
 /// </summary>

@@ -1,9 +1,9 @@
 using Jellyfin.Database.Implementations.Entities;
-using Jellyfin.Plugin.EnhancedNextUp.Resolvers;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Resolvers;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Services;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Services;
 
 /// <summary>
 /// Retrieves the episodes of a series, translated into the algorithm's

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Enhanced Next Up</title>
+    <title>Next Up (Recently Watched)</title>
 </head>
 <body>
-<div id="EnhancedNextUpConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+<div id="NextUpRecentlyWatchedConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
     <div data-role="content">
         <div class="content-primary">
-            <form id="EnhancedNextUpConfigForm">
+            <form id="NextUpRecentlyWatchedConfigForm">
                 <div class="verticalSection">
-                    <h2>Enhanced Next Up</h2>
+                    <h2>Next Up (Recently Watched)</h2>
                     <p>
                         Chooses the "Next Up" episode based on the most recently watched
                         episode instead of the highest-numbered watched episode, so
@@ -20,7 +20,7 @@
                 <div class="checkboxContainer">
                     <label>
                         <input id="EnableForAllSeries" name="EnableForAllSeries" type="checkbox" is="emby-checkbox" />
-                        <span>Enable Enhanced Next Up for all TV shows</span>
+                        <span>Enable Next Up (Recently Watched) for all TV shows</span>
                     </label>
                 </div>
                 <div class="checkboxContainer">
@@ -32,7 +32,7 @@
                 <div id="PerSeriesSection" class="verticalSection">
                     <h3>Enabled TV Shows</h3>
                     <p>
-                        Enhanced Next Up is disabled by default. When "Enable for all TV
+                        Next Up (Recently Watched) is disabled by default. When "Enable for all TV
                         shows" above is off, pick which individual shows should use it.
                     </p>
                     <div id="SeriesList" class="paperList"></div>
@@ -77,7 +77,7 @@
                 });
             }
 
-            document.querySelector('#EnhancedNextUpConfigPage')
+            document.querySelector('#NextUpRecentlyWatchedConfigPage')
                 .addEventListener('pageshow', function () {
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {
@@ -101,7 +101,7 @@
             document.querySelector('#EnableForAllSeries')
                 .addEventListener('change', updatePerSeriesVisibility);
 
-            document.querySelector('#EnhancedNextUpConfigForm')
+            document.querySelector('#NextUpRecentlyWatchedConfigForm')
                 .addEventListener('submit', function (e) {
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {

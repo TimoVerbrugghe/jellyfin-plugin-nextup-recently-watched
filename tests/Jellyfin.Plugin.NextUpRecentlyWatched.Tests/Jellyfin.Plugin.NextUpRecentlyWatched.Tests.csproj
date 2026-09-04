@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Jellyfin.Plugin.EnhancedNextUp\Jellyfin.Plugin.EnhancedNextUp.csproj" />
+    <ProjectReference Include="..\..\src\Jellyfin.Plugin.NextUpRecentlyWatched\Jellyfin.Plugin.NextUpRecentlyWatched.csproj" />
   </ItemGroup>
 
 </Project>

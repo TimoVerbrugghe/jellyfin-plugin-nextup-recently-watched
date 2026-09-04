@@ -2,10 +2,10 @@ using Jellyfin.Database.Implementations.Entities;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Filtering;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Filtering;
 
 /// <summary>
-/// Resolves the Enhanced Next Up episode for a series/user combination.
+/// Resolves the Next Up (Recently Watched) episode for a series/user combination.
 /// </summary>
 public interface INextUpResolver
 {

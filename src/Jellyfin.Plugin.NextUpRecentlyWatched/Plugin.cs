@@ -2,12 +2,12 @@ using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
-using Jellyfin.Plugin.EnhancedNextUp.Configuration;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Configuration;
 
-namespace Jellyfin.Plugin.EnhancedNextUp;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched;
 
 /// <summary>
-/// The Enhanced Next Up plugin entry point. Registers the plugin with Jellyfin and
+/// The Next Up (Recently Watched) plugin entry point. Registers the plugin with Jellyfin and
 /// exposes its configuration page. The actual "Next Up" interception logic lives in
 /// <see cref="PluginServiceRegistrator"/> and the <c>Filtering</c>/<c>Resolvers</c>
 /// namespaces.
@@ -31,7 +31,7 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     public static Plugin? Instance { get; private set; }
 
     /// <inheritdoc />
-    public override string Name => "Enhanced Next Up";
+    public override string Name => "Next Up (Recently Watched)";
 
     /// <inheritdoc />
     public override string Description =>

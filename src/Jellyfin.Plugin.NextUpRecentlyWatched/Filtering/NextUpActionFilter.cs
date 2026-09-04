@@ -1,4 +1,4 @@
-using Jellyfin.Plugin.EnhancedNextUp.Filtering;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Filtering;
 using MediaBrowser.Controller.Dto;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
@@ -8,7 +8,7 @@ using MediaBrowser.Model.Querying;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Filtering;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Filtering;
 
 /// <summary>
 /// Intercepts the <c>/Shows/NextUp</c> endpoint's MVC action execution and, for each

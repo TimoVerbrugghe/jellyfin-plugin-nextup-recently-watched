@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="src/Jellyfin.Plugin.EnhancedNextUp/Jellyfin.Plugin.EnhancedNextUp.csproj" />
-  <Folder Name="/tests/">
-    <Project Path="tests/Jellyfin.Plugin.EnhancedNextUp.Tests/Jellyfin.Plugin.EnhancedNextUp.Tests.csproj" />
-  </Folder>
-</Solution>

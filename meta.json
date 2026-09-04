@@ -2,12 +2,12 @@
   "category": "General",
   "description": "Selects the Next Up episode based on the episode most recently watched instead of the highest-numbered watched episode, so returning viewers see the correct continuation point.",
   "guid": "f3d1a9c2-8b7e-4c1d-9a2f-6e5d4c3b2a10",
-  "name": "Enhanced Next Up",
+  "name": "Next Up (Recently Watched)",
   "overview": "Next Up that picks up where you actually left off, not just the highest episode you've watched.",
   "owner": "TimoVerbrugghe",
   "targetAbi": "10.11.0.0",
   "timestamp": "2026-01-01T00:00:00.000Z",
-  "version": "1.0.1.0",
+  "version": "1.1.0.0",
   "status": "Active",
   "autoUpdate": false
 }

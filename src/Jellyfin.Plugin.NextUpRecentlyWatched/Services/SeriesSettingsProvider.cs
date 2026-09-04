@@ -1,4 +1,4 @@
-namespace Jellyfin.Plugin.EnhancedNextUp.Services;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Services;
 
 /// <summary>
 /// Default <see cref="ISeriesSettingsProvider"/> backed by the plugin's persisted

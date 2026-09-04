@@ -1,4 +1,4 @@
-namespace Jellyfin.Plugin.EnhancedNextUp.Resolvers;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Resolvers;
 
 /// <summary>
 /// Implements the plugin's core episode selection algorithm described in the project
@@ -12,7 +12,7 @@ namespace Jellyfin.Plugin.EnhancedNextUp.Resolvers;
 public static class EpisodeSequenceResolver
 {
     /// <summary>
-    /// Determines the Enhanced Next Up episode for a series.
+    /// Determines the Next Up (Recently Watched) episode for a series.
     /// </summary>
     /// <param name="episodes">
     /// Every standard-content episode belonging to the series (across all seasons),

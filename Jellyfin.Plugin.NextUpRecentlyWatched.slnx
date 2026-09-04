@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/Jellyfin.Plugin.NextUpRecentlyWatched/Jellyfin.Plugin.NextUpRecentlyWatched.csproj" />
+  <Folder Name="/tests/">
+    <Project Path="tests/Jellyfin.Plugin.NextUpRecentlyWatched.Tests/Jellyfin.Plugin.NextUpRecentlyWatched.Tests.csproj" />
+  </Folder>
+</Solution>

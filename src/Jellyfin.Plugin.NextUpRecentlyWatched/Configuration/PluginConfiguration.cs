@@ -1,9 +1,9 @@
 using MediaBrowser.Model.Plugins;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Configuration;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Configuration;
 
 /// <summary>
-/// Persisted, user-configurable settings for the Enhanced Next Up plugin.
+/// Persisted, user-configurable settings for the Next Up (Recently Watched) plugin.
 /// </summary>
 public sealed class PluginConfiguration : BasePluginConfiguration
 {

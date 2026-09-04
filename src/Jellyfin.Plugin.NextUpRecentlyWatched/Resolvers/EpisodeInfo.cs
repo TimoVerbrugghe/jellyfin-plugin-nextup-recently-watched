@@ -1,4 +1,4 @@
-namespace Jellyfin.Plugin.EnhancedNextUp.Resolvers;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Resolvers;
 
 /// <summary>
 /// A minimal, Jellyfin-agnostic representation of a single episode used by the

@@ -1,7 +1,7 @@
-using Jellyfin.Plugin.EnhancedNextUp.Resolvers;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Resolvers;
 using Xunit;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Tests;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Tests;
 
 /// <summary>
 /// Unit tests for <see cref="EpisodeSequenceResolver"/>, mapped directly to the

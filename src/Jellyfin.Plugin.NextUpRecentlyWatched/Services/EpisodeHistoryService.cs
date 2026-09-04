@@ -1,11 +1,11 @@
 using Jellyfin.Database.Implementations.Entities;
-using Jellyfin.Plugin.EnhancedNextUp.Resolvers;
+using Jellyfin.Plugin.NextUpRecentlyWatched.Resolvers;
 using MediaBrowser.Controller.Dto;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.TV;
 using MediaBrowser.Controller.Library;
 
-namespace Jellyfin.Plugin.EnhancedNextUp.Services;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Services;
 
 /// <summary>
 /// Builds the pure <see cref="EpisodeInfo"/> view of a series' episodes (for a given

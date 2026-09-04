@@ -1,4 +1,4 @@
-namespace Jellyfin.Plugin.EnhancedNextUp.Services;
+namespace Jellyfin.Plugin.NextUpRecentlyWatched.Services;
 
 /// <summary>
 /// Reads per-series enable/disable state from the plugin configuration.
@@ -6,7 +6,7 @@ namespace Jellyfin.Plugin.EnhancedNextUp.Services;
 public interface ISeriesSettingsProvider
 {
     /// <summary>
-    /// Determines whether Enhanced Next Up should compute the next episode for the
+    /// Determines whether Next Up (Recently Watched) should compute the next episode for the
     /// given series, or whether Jellyfin's built-in logic should be used instead.
     /// </summary>
     /// <param name="seriesId">The series id.</param>

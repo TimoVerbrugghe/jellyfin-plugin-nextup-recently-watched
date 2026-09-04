@@ -20,10 +20,10 @@ jobs:
           dotnet-version: '9.0.x'
 
       - name: Restore
-        run: dotnet restore Jellyfin.Plugin.EnhancedNextUp.slnx
+        run: dotnet restore Jellyfin.Plugin.NextUpRecentlyWatched.slnx
 
       - name: Build
-        run: dotnet build Jellyfin.Plugin.EnhancedNextUp.slnx --configuration Release --no-restore
+        run: dotnet build Jellyfin.Plugin.NextUpRecentlyWatched.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test Jellyfin.Plugin.EnhancedNextUp.slnx --configuration Release --no-build --verbosity normal
+        run: dotnet test Jellyfin.Plugin.NextUpRecentlyWatched.slnx --configuration Release --no-build --verbosity normal
