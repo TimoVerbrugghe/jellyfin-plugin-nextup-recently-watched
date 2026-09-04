@@ -10,11 +10,11 @@ public sealed class SeriesSettingsProvider : ISeriesSettingsProvider
     public bool IsEnabledForSeries(Guid seriesId)
     {
         var configuration = Plugin.Instance?.Configuration;
-        if (configuration is null || !configuration.Enabled)
+        if (configuration is null)
         {
             return false;
         }
 
-        return !configuration.DisabledSeriesIds.Contains(seriesId);
+        return configuration.EnableForAllSeries || configuration.EnabledSeriesIds.Contains(seriesId);
     }
 }

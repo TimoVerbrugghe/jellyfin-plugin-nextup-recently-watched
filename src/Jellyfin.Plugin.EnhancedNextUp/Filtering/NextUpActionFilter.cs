@@ -60,7 +60,7 @@ internal sealed class NextUpActionFilter : IAsyncActionFilter
         var userId = GetUserId(context);
         var executed = await next().ConfigureAwait(false);
 
-        if (userId is null || Plugin.Instance?.Configuration.Enabled != true)
+        if (userId is null)
         {
             return;
         }
