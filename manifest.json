@@ -9,6 +9,14 @@
     "imageUrl": "",
     "versions": [
       {
+        "version": "1.0.1.0",
+        "targetAbi": "10.11.0.0",
+        "sourceUrl": "https://github.com/TimoVerbrugghe/jellyfin-plugin-enhanced-nextup/releases/download/v1.0.1.0/enup-plugin.zip",
+        "checksum": "dc0fbcb665eddfcf1e1b8391f9b753a7",
+        "timestamp": "2026-09-04T00:00:00.000Z",
+        "changelog": "Fix: NextUp override never applied because the action filter matched the wrong controller name (route segment \"Shows\" instead of MVC controller name \"TvShows\")."
+      },
+      {
         "version": "1.0.0.0",
         "targetAbi": "10.11.0.0",
         "sourceUrl": "https://github.com/TimoVerbrugghe/jellyfin-plugin-enhanced-nextup/releases/download/v1.0.0.0/enup-plugin.zip",

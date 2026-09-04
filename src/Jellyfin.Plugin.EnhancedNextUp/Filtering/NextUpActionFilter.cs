@@ -112,14 +112,22 @@ internal sealed class NextUpActionFilter : IAsyncActionFilter
 
     /// <summary>
     /// Determines whether the current request targets the Next Up endpoint
-    /// (<c>ShowsController.GetNextUp</c>). Classification is deliberately narrow so the
-    /// filter has zero effect on unrelated requests.
+    /// (<c>TvShowsController.GetNextUp</c>, routed at <c>/Shows/NextUp</c>).
+    /// Classification is deliberately narrow so the filter has zero effect on
+    /// unrelated requests.
     /// </summary>
+    /// <remarks>
+    /// The MVC <see cref="Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor.ControllerName"/>
+    /// is derived from the controller's class name (minus the "Controller" suffix),
+    /// which is <c>TvShows</c> for Jellyfin's <c>TvShowsController</c> — not the
+    /// <c>[Route("Shows")]</c> attribute's route segment. Matching on the route
+    /// segment instead of the class-derived name would never succeed.
+    /// </remarks>
     private static bool IsNextUpEndpoint(ActionContext context)
     {
         var actionDescriptor = context.ActionDescriptor as Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor;
         return actionDescriptor is not null
-            && string.Equals(actionDescriptor.ControllerName, "Shows", StringComparison.Ordinal)
+            && string.Equals(actionDescriptor.ControllerName, "TvShows", StringComparison.Ordinal)
             && string.Equals(actionDescriptor.ActionName, "GetNextUp", StringComparison.Ordinal);
     }
 
