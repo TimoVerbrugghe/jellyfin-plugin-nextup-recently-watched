@@ -55,7 +55,7 @@ The plugin is **disabled for all TV shows by default**. On the plugin's settings
 2. Add a new repository with this manifest URL:
 
    ```text
-   https://github.com/TimoVerbrugghe/jellyfin-plugin-nextup-recently-watched/releases/latest/download/manifest.json
+   https://raw.githubusercontent.com/TimoVerbrugghe/jellyfin-plugin-nextup-recently-watched/main/manifest.json
    ```
 
 3. Go to **Dashboard → Plugins → Catalog**, find **Next Up (Recently Watched)**, and
