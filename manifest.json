@@ -12,7 +12,7 @@
         "version": "1.0.0.0",
         "targetAbi": "10.11.0.0",
         "sourceUrl": "https://github.com/TimoVerbrugghe/jellyfin-plugin-enhanced-nextup/releases/download/v1.0.0.0/enup-plugin.zip",
-        "checksum": "af279b4fc6a0c518ca8a33831c5f5917e637d053967e617758bb81a4a7413e57",
+        "checksum": "2cf92dbba0e95e43f1d06b7f7189647d",
         "timestamp": "2026-01-01T00:00:00.000Z",
         "changelog": "Initial release."
       }
