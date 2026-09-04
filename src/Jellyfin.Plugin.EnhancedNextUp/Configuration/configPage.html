@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Enhanced Next Up</title>
+</head>
+<body>
+<div id="EnhancedNextUpConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="EnhancedNextUpConfigForm">
+                <div class="verticalSection">
+                    <h2>Enhanced Next Up</h2>
+                    <p>
+                        Chooses the "Next Up" episode based on the most recently watched
+                        episode instead of the highest-numbered watched episode, so
+                        rewatching an old episode surfaces its immediate follow-up instead
+                        of the series finale.
+                    </p>
+                </div>
+                <div class="checkboxContainer">
+                    <label>
+                        <input id="Enabled" name="Enabled" type="checkbox" is="emby-checkbox" />
+                        <span>Enable Enhanced Next Up</span>
+                    </label>
+                </div>
+                <div class="checkboxContainer">
+                    <label>
+                        <input id="IncludeSpecials" name="IncludeSpecials" type="checkbox" is="emby-checkbox" />
+                        <span>Include specials when determining the next episode</span>
+                    </label>
+                </div>
+                <div>
+                    <button is="emby-button" type="submit" class="raised button-submit block">
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function () {
+            var pluginId = "f3d1a9c2-8b7e-4c1d-9a2f-6e5d4c3b2a10";
+
+            document.querySelector('#EnhancedNextUpConfigPage')
+                .addEventListener('pageshow', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        document.querySelector('#Enabled').checked = config.Enabled;
+                        document.querySelector('#IncludeSpecials').checked = config.IncludeSpecials;
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+            document.querySelector('#EnhancedNextUpConfigForm')
+                .addEventListener('submit', function (e) {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                        config.Enabled = document.querySelector('#Enabled').checked;
+                        config.IncludeSpecials = document.querySelector('#IncludeSpecials').checked;
+                        ApiClient.updatePluginConfiguration(pluginId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    });
+                    e.preventDefault();
+                    return false;
+                });
+        })();
+    </script>
+</div>
+</body>
+</html>
