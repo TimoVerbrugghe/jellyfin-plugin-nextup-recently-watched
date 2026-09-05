@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
@@ -10,8 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jellyfin.Controller" Version="10.11.3" />
-    <PackageReference Include="Jellyfin.Model" Version="10.11.3" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.11.3" Condition="'$(TargetFramework)' == 'net9.0'" />
+    <PackageReference Include="Jellyfin.Model" Version="10.11.3" Condition="'$(TargetFramework)' == 'net9.0'" />
+    <PackageReference Include="Jellyfin.Controller" Version="12.0.0-rc7" Condition="'$(TargetFramework)' == 'net10.0'" />
+    <PackageReference Include="Jellyfin.Model" Version="12.0.0-rc7" Condition="'$(TargetFramework)' == 'net10.0'" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">

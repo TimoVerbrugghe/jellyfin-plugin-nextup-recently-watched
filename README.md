@@ -66,12 +66,18 @@ The plugin is **disabled for all TV shows by default**. On the plugin's settings
 
 Alternatively, download a release zip directly from the
 [Releases](https://github.com/TimoVerbrugghe/jellyfin-plugin-nextup-recently-watched/releases)
-page and extract it into your Jellyfin `plugins/` directory.
+page, choosing the build that matches your Jellyfin version, and extract it into your
+Jellyfin `plugins/` directory.
 
 ## Compatibility
 
-Targets Jellyfin `10.11.x`. Future releases will aim to track the latest supported Jellyfin
-version where API compatibility permits.
+Two separately built plugin artifacts are supported:
+
+- **Jellyfin 10.11.x** — download the `jellyfin-10.11` build.
+- **Jellyfin 12.x** — download the `jellyfin-12` build.
+
+The artifacts have different .NET and Jellyfin API requirements and are not interchangeable.
+Continuous-integration runs publish both as downloadable workflow artifacts.
 
 ## Development
 
