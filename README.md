@@ -83,3 +83,22 @@ Continuous-integration runs publish both as downloadable workflow artifacts.
 
 See [.github/copilot-instructions.md](.github/copilot-instructions.md) for the algorithm
 spec, project layout, and build/test instructions if you'd like to contribute.
+
+### Dev Container
+
+Open the repository in a [Dev Container](https://containers.dev/) to use the included .NET 9
+and .NET 10 SDKs. Run `dotnet restore Jellyfin.Plugin.NextUpRecentlyWatched.slnx` after opening
+the container. The container exposes the host Docker socket, so a locally built plugin can
+be copied into and exercised with a matching Jellyfin container:
+
+```bash
+dotnet build --framework net10.0 --configuration Release
+mkdir -p /tmp/jellyfin-config/plugins/NextUpRecentlyWatched
+cp src/Jellyfin.Plugin.NextUpRecentlyWatched/bin/Release/net10.0/Jellyfin.Plugin.NextUpRecentlyWatched.dll /tmp/jellyfin-config/plugins/NextUpRecentlyWatched/
+docker run --rm -p 8096:8096 \
+  -v /tmp/jellyfin-config:/config \
+  jellyfin/jellyfin:12.0-rc7
+```
+
+For Jellyfin 10.11, substitute `net9.0` and a `10.11.x` Jellyfin image tag. Restart the
+container after rebuilding the plugin; Jellyfin loads plugins at startup.

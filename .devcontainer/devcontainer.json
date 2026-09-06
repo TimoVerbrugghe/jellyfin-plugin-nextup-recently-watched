@@ -1,0 +1,17 @@
+{
+  "name": "Jellyfin Next Up Plugin",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "postStartCommand": "socket_gid=\"$(stat --format='%g' /var/run/docker.sock)\"; socket_group=\"$(getent group \"$socket_gid\" | cut -d: -f1)\"; if [ -z \"$socket_group\" ]; then sudo groupadd --gid \"$socket_gid\" docker-host; socket_group=docker-host; fi; sudo usermod -aG \"$socket_group\" vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit"
+      ]
+    }
+  }
+}
