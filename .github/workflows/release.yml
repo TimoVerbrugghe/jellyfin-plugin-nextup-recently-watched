@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Needed so we can commit the corrected manifest.json checksum back to main.
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore Jellyfin.Plugin.NextUpRecentlyWatched.slnx
+
+      - name: Build
+        run: dotnet build Jellyfin.Plugin.NextUpRecentlyWatched.slnx --configuration Release --no-restore
+
+      - name: Package plugin zip
+        run: |
+          mkdir -p dist
+          zip -j dist/enup-plugin.zip src/Jellyfin.Plugin.NextUpRecentlyWatched/bin/Release/net10.0/Jellyfin.Plugin.NextUpRecentlyWatched.dll
+
+      - name: Sync manifest.json checksum with built artifact
+        id: manifest
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          checksum=$(md5sum dist/enup-plugin.zip | cut -d ' ' -f1)
+          python3 - "$version" "$checksum" <<'EOF'
+          import json
+          import sys
+          from datetime import datetime, timezone
+
+          version, checksum = sys.argv[1], sys.argv[2]
+
+          with open("manifest.json", encoding="utf-8") as f:
+              data = json.load(f)
+
+          entries = data[0]["versions"]
+          entry = next((v for v in entries if v["version"] == version), None)
+          if entry is None:
+              raise SystemExit(
+                  f"No versions[] entry for {version} in manifest.json; "
+                  "add the entry before tagging a release."
+              )
+
+          entry["checksum"] = checksum
+          entry["timestamp"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+          with open("manifest.json", "w", encoding="utf-8") as f:
+              json.dump(data, f, indent=2)
+              f.write("\n")
+          EOF
+
+      - name: Commit corrected checksum (if changed)
+        run: |
+          if git diff --quiet -- manifest.json; then
+            echo "manifest.json checksum already up to date."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add manifest.json
+            git commit -m "Sync manifest.json checksum for ${GITHUB_REF_NAME}"
+            git push origin HEAD:main
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/enup-plugin.zip
+            manifest.json
+          generate_release_notes: true
