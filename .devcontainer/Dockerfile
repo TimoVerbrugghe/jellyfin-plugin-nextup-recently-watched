@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/dotnet:1-9.0-noble
+FROM mcr.microsoft.com/devcontainers/dotnet:1-10.0
 
 USER root
 

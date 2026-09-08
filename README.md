@@ -71,13 +71,9 @@ Jellyfin `plugins/` directory.
 
 ## Compatibility
 
-Two separately built plugin artifacts are supported:
-
-- **Jellyfin 10.11.x** — download the `jellyfin-10.11` build.
-- **Jellyfin 12.x** — download the `jellyfin-12` build.
-
-The artifacts have different .NET and Jellyfin API requirements and are not interchangeable.
-Continuous-integration runs publish both as downloadable workflow artifacts.
+Version `1.2.0.0` and later support **Jellyfin 12.x only**. Jellyfin `10.11.x` users should
+continue using version `1.1.0.0` or an earlier release; Jellyfin 12 builds are not compatible
+with Jellyfin 10.11.
 
 ## Development
 
@@ -86,9 +82,9 @@ spec, project layout, and build/test instructions if you'd like to contribute.
 
 ### Dev Container
 
-Open the repository in a [Dev Container](https://containers.dev/) to use the included .NET 9
-and .NET 10 SDKs. Run `dotnet restore Jellyfin.Plugin.NextUpRecentlyWatched.slnx` after opening
-the container. The container exposes the host Docker socket, so a locally built plugin can
+Open the repository in a [Dev Container](https://containers.dev/) to use the included .NET 10
+SDK. Run `dotnet restore Jellyfin.Plugin.NextUpRecentlyWatched.slnx` after opening the container.
+The container exposes the host Docker socket, so a locally built plugin can
 be copied into and exercised with a matching Jellyfin container:
 
 ```bash
@@ -100,5 +96,4 @@ docker run --rm -p 8096:8096 \
   jellyfin/jellyfin:12.0-rc7
 ```
 
-For Jellyfin 10.11, substitute `net9.0` and a `10.11.x` Jellyfin image tag. Restart the
-container after rebuilding the plugin; Jellyfin loads plugins at startup.
+Restart the container after rebuilding the plugin; Jellyfin loads plugins at startup.
