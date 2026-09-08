@@ -93,7 +93,7 @@ mkdir -p /tmp/jellyfin-config/plugins/NextUpRecentlyWatched
 cp src/Jellyfin.Plugin.NextUpRecentlyWatched/bin/Release/net10.0/Jellyfin.Plugin.NextUpRecentlyWatched.dll /tmp/jellyfin-config/plugins/NextUpRecentlyWatched/
 docker run --rm -p 8096:8096 \
   -v /tmp/jellyfin-config:/config \
-  jellyfin/jellyfin:12.0-rc7
+  jellyfin/jellyfin:12.0.0
 ```
 
 Restart the container after rebuilding the plugin; Jellyfin loads plugins at startup.
