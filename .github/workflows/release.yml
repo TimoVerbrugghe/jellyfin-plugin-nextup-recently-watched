@@ -1,9 +1,12 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Optional explicit release version (format: X.Y.Z.W)"
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -15,9 +18,136 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Needed so we can commit the corrected manifest.json checksum back to main.
           ref: main
           fetch-depth: 0
+
+      - name: Resolve release version and update metadata
+        id: prepare
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          python3 <<'EOF'
+          import json
+          import os
+          import re
+          import subprocess
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          manifest_path = Path("manifest.json")
+          meta_path = Path("meta.json")
+          csproj_path = Path("src/Jellyfin.Plugin.NextUpRecentlyWatched/Jellyfin.Plugin.NextUpRecentlyWatched.csproj")
+
+          def parse_version(value: str) -> tuple[int, int, int, int]:
+              parts = value.split(".")
+              if len(parts) != 4:
+                  raise ValueError(f"Version '{value}' must have 4 numeric segments (X.Y.Z.W).")
+              parsed = []
+              for part in parts:
+                  if not part.isdigit():
+                      raise ValueError(f"Version '{value}' has non-numeric segment '{part}'.")
+                  parsed.append(int(part))
+              return tuple(parsed)
+
+          with manifest_path.open(encoding="utf-8") as f:
+              manifest = json.load(f)
+
+          with meta_path.open(encoding="utf-8") as f:
+              meta = json.load(f)
+
+          versions = manifest[0]["versions"]
+          if not versions:
+              raise SystemExit("manifest.json versions[] must contain at least one release.")
+
+          ordered_versions = sorted((parse_version(v["version"]), v["version"]) for v in versions)
+          latest_version = ordered_versions[-1][1]
+          latest_version_tuple = ordered_versions[-1][0]
+
+          requested_version = (os.getenv("INPUT_VERSION") or "").strip()
+          if requested_version:
+              parse_version(requested_version)
+              release_version = requested_version
+          else:
+              bumped = list(latest_version_tuple)
+              bumped[3] += 1
+              release_version = ".".join(str(part) for part in bumped)
+
+          parse_version(release_version)
+          previous_version = latest_version
+          previous_tag = f"v{previous_version}"
+          release_tag = f"v{release_version}"
+
+          git_log_args = ["git", "log", "--pretty=%s"]
+          if release_version != previous_version and subprocess.run(
+              ["git", "rev-parse", "-q", "--verify", f"refs/tags/{previous_tag}"],
+              check=False,
+              stdout=subprocess.DEVNULL,
+              stderr=subprocess.DEVNULL,
+          ).returncode == 0:
+              git_log_args.insert(2, f"{previous_tag}..HEAD")
+
+          log_output = subprocess.run(
+              git_log_args,
+              check=True,
+              text=True,
+              capture_output=True,
+          ).stdout
+          commit_messages = [line.strip() for line in log_output.splitlines() if line.strip()]
+          short_messages = commit_messages[:3]
+          if short_messages:
+              changelog = f"Changes since {previous_tag}: " + " | ".join(short_messages)
+          else:
+              changelog = f"Changes since {previous_tag}: Maintenance release."
+
+          if any(v["version"] == release_version for v in versions):
+              versions = [v for v in versions if v["version"] != release_version]
+
+          now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+          new_entry = {
+              "version": release_version,
+              "targetAbi": meta["targetAbi"],
+              "sourceUrl": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/releases/download/{release_tag}/enup-plugin.zip",
+              "checksum": "",
+              "timestamp": now,
+              "changelog": changelog,
+          }
+
+          manifest[0]["versions"] = [new_entry, *versions]
+          meta["version"] = release_version
+          meta["timestamp"] = now
+
+          with manifest_path.open("w", encoding="utf-8") as f:
+              json.dump(manifest, f, indent=2)
+              f.write("\n")
+
+          with meta_path.open("w", encoding="utf-8") as f:
+              json.dump(meta, f, indent=2)
+              f.write("\n")
+
+          csproj_text = csproj_path.read_text(encoding="utf-8")
+          csproj_text, assembly_count = re.subn(
+              r"(<AssemblyVersion>)([^<]+)(</AssemblyVersion>)",
+              rf"\g<1>{release_version}\g<3>",
+              csproj_text,
+              count=1,
+          )
+          csproj_text, file_count = re.subn(
+              r"(<FileVersion>)([^<]+)(</FileVersion>)",
+              rf"\g<1>{release_version}\g<3>",
+              csproj_text,
+              count=1,
+          )
+          if assembly_count != 1 or file_count != 1:
+              raise SystemExit("Failed to update AssemblyVersion/FileVersion in csproj.")
+          csproj_path.write_text(csproj_text, encoding="utf-8")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write(f"version={release_version}\n")
+              out.write(f"tag={release_tag}\n")
+              out.write("changelog<<EOF\n")
+              out.write(changelog + "\n")
+              out.write("EOF\n")
+          EOF
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -38,7 +168,7 @@ jobs:
       - name: Sync manifest.json checksum with built artifact
         id: manifest
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${{ steps.prepare.outputs.version }}"
           checksum=$(md5sum dist/enup-plugin.zip | cut -d ' ' -f1)
           python3 - "$version" "$checksum" <<'EOF'
           import json
@@ -54,8 +184,7 @@ jobs:
           entry = next((v for v in entries if v["version"] == version), None)
           if entry is None:
               raise SystemExit(
-                  f"No versions[] entry for {version} in manifest.json; "
-                  "add the entry before tagging a release."
+                  f"No versions[] entry for {version} in manifest.json after preparation."
               )
 
           entry["checksum"] = checksum
@@ -66,20 +195,24 @@ jobs:
               f.write("\n")
           EOF
 
-      - name: Commit corrected checksum (if changed)
+      - name: Commit release metadata
         run: |
-          if git diff --quiet -- manifest.json; then
-            echo "manifest.json checksum already up to date."
+          if git diff --quiet -- manifest.json meta.json src/Jellyfin.Plugin.NextUpRecentlyWatched/Jellyfin.Plugin.NextUpRecentlyWatched.csproj; then
+            echo "Release metadata already up to date."
           else
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add manifest.json
-            git commit -m "Sync manifest.json checksum for ${GITHUB_REF_NAME}"
+            git add manifest.json meta.json src/Jellyfin.Plugin.NextUpRecentlyWatched/Jellyfin.Plugin.NextUpRecentlyWatched.csproj
+            git commit -m "Release ${{ steps.prepare.outputs.tag }}"
             git push origin HEAD:main
           fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.prepare.outputs.tag }}
+          name: ${{ steps.prepare.outputs.tag }}
+          body: ${{ steps.prepare.outputs.changelog }}
+          target_commitish: main
           files: dist/enup-plugin.zip
           generate_release_notes: true
