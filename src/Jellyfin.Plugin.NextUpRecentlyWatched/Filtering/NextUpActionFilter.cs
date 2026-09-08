@@ -7,6 +7,7 @@ using MediaBrowser.Model.Dto;
 using MediaBrowser.Model.Querying;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.NextUpRecentlyWatched.Filtering;
 
@@ -28,6 +29,7 @@ internal sealed class NextUpActionFilter : IAsyncActionFilter
     private readonly ILibraryManager _libraryManager;
     private readonly IUserManager _userManager;
     private readonly IDtoService _dtoService;
+    private readonly ILogger<NextUpActionFilter> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NextUpActionFilter"/> class.
@@ -36,16 +38,19 @@ internal sealed class NextUpActionFilter : IAsyncActionFilter
     /// <param name="libraryManager">Instance of the <see cref="ILibraryManager"/> interface.</param>
     /// <param name="userManager">Instance of the <see cref="IUserManager"/> interface.</param>
     /// <param name="dtoService">Instance of the <see cref="IDtoService"/> interface.</param>
+    /// <param name="logger">Instance of the <see cref="ILogger{TCategoryName}"/> interface.</param>
     public NextUpActionFilter(
         INextUpResolver nextUpResolver,
         ILibraryManager libraryManager,
         IUserManager userManager,
-        IDtoService dtoService)
+        IDtoService dtoService,
+        ILogger<NextUpActionFilter> logger)
     {
         _nextUpResolver = nextUpResolver;
         _libraryManager = libraryManager;
         _userManager = userManager;
         _dtoService = dtoService;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -101,6 +106,15 @@ internal sealed class NextUpActionFilter : IAsyncActionFilter
 
             mutable ??= new List<BaseItemDto>(items);
             mutable[i] = _dtoService.GetBaseItemDto(nextEpisode, new DtoOptions(true), user);
+            _logger.LogInformation(
+                "Next Up Recently Watched overriding Jellyfin Next Up suggestion for series {SeriesName} ({SeriesId}) and user {UserId}: {OriginalEpisodeName} ({OriginalEpisodeId}) -> {ReplacementEpisodeName} ({ReplacementEpisodeId})",
+                series.Name,
+                series.Id,
+                userId.Value,
+                currentDto.Name,
+                currentDto.Id,
+                nextEpisode.Name,
+                nextEpisode.Id);
             replaced = true;
         }
 
