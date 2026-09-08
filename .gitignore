@@ -21,6 +21,9 @@ artifacts/
 .idea/
 *.DotSettings.user
 
+## Dev Containers
+.devcontainer/devcontainer-lock.json
+
 ## Test results
 [Tt]est[Rr]esult*/
 *.trx

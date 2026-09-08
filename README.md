@@ -66,14 +66,34 @@ The plugin is **disabled for all TV shows by default**. On the plugin's settings
 
 Alternatively, download a release zip directly from the
 [Releases](https://github.com/TimoVerbrugghe/jellyfin-plugin-nextup-recently-watched/releases)
-page and extract it into your Jellyfin `plugins/` directory.
+page, choosing the build that matches your Jellyfin version, and extract it into your
+Jellyfin `plugins/` directory.
 
 ## Compatibility
 
-Targets Jellyfin `10.11.x`. Future releases will aim to track the latest supported Jellyfin
-version where API compatibility permits.
+Version `1.2.0.0` and later support **Jellyfin 12.x only**. Jellyfin `10.11.x` users should
+continue using version `1.1.0.0` or an earlier release; Jellyfin 12 builds are not compatible
+with Jellyfin 10.11.
 
 ## Development
 
 See [.github/copilot-instructions.md](.github/copilot-instructions.md) for the algorithm
 spec, project layout, and build/test instructions if you'd like to contribute.
+
+### Dev Container
+
+Open the repository in a [Dev Container](https://containers.dev/) to use the included .NET 10
+SDK. Run `dotnet restore Jellyfin.Plugin.NextUpRecentlyWatched.slnx` after opening the container.
+The container exposes the host Docker socket, so a locally built plugin can
+be copied into and exercised with a matching Jellyfin container:
+
+```bash
+dotnet build --framework net10.0 --configuration Release
+mkdir -p /tmp/jellyfin-config/plugins/NextUpRecentlyWatched
+cp src/Jellyfin.Plugin.NextUpRecentlyWatched/bin/Release/net10.0/Jellyfin.Plugin.NextUpRecentlyWatched.dll /tmp/jellyfin-config/plugins/NextUpRecentlyWatched/
+docker run --rm -p 8096:8096 \
+  -v /tmp/jellyfin-config:/config \
+  jellyfin/jellyfin:12.0.0
+```
+
+Restart the container after rebuilding the plugin; Jellyfin loads plugins at startup.
